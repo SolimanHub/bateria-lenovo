@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+nivel=$(acpi | cut -d ' ' -f 4 | cut -d ',' -f1 | cut -d '%' -f1)
+
+echo $nivel
+
+if [ $nivel -gt '10' ] && [ $nivel -lt '95' ]
+then
+  echo 'ok'
+elif [ $nivel -ge '95' ]
+then
+  echo 'desconectar'
+elif [ $nivel -le '10' ]
+then
+  echo 'conectar'
+fi
