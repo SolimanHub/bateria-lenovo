@@ -1,16 +1,24 @@
 #!/usr/bin/bash
 
 nivel=$(acpi | cut -d ' ' -f 4 | cut -d ',' -f1 | cut -d '%' -f1)
-
-echo $nivel
+estado1=$(cat estado)
 
 if [ $nivel -gt '10' ] && [ $nivel -lt '95' ]
 then
-  echo 'ok'
+  echo 'ok' > estado
 elif [ $nivel -ge '95' ]
 then
-  echo 'desconectar'
+  echo 'desconectar' > estado
 elif [ $nivel -le '10' ]
 then
-  echo 'conectar'
+  echo 'conectar' > estado
+fi
+
+estado2=$(cat estado)
+
+if [ $estado1 != $estado2 ]
+then
+  git add -A
+  git commit -m "$estado2"
+  git push
 fi
