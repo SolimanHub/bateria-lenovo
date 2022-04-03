@@ -5,14 +5,23 @@ while [ $i -eq 0 ]
 do
   read -t 5 
   nivel=$(acpi | cut -d ' ' -f 4 | cut -d ',' -f1 | cut -d '%' -f1)
+  bateria=$(acpi | cut -d " " -f3 | cut -d ',' -f1)
   estado1=$(cat estado)
-  echo $nivel $estado1
+  centinela = 'true'
+
+  echo $nivel $bateria $estado1
+  if [ $bateria == 'Charging' ] && [ estado1 == 'desconectar' ] && [ $centinela == 'true' ]
+  then
+    echo 'conectar' > estado
+    $centinela = 'false'
+  fi
   if [ $nivel -ge '95' ]
   then
     echo 'desconectar' > estado
-  elif [ $nivel -le '5' ]
+  elif [ $nivel -le '6' ]
   then
     echo 'conectar' > estado
+    $centinela = 'true'
   fi
 
   estado2=$(cat estado)
